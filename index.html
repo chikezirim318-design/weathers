@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zirim-weather</title>
+    <link rel="stylesheet" href="style.css">
+       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">Zirim Weather</h1>
+
+        <div class="search-box">
+            <input type="text" id="city" placeholder="Enter city name">
+            
+            <button id="searchBtn">Search</button>
+            <button onclick="toggleUnit()">°C / °F</button>
+        
+            
+            <ul id="suggestions" class="suggestions"></ul>
+
+        </div>
+
+        <div class="weather-card">
+            <h2 id="cityName"></h2>
+            <p id="dateTime"></p>
+            <p id="temperature"></p>
+            <p id="description"></p>
+            <img id="weatherIcon" />
+        </div>
+        
+        <div id="forecastContainer" class="forecast"></div>
+        <canvas id="weatherChart"></canvas>    
+        
+
+       </div>
+       <!-- Error Modal -->
+<div id="errorModal" class="modal">
+  <div class="modal-content">
+    <span id="closeModal" class="close">&times;</span>
+    <p id="modalMessage">This is an error message</p>
+  </div>
+</div>
+
+<button id="themeToggle" class="theme-btn">
+    <!-- Sun Icon -->
+    <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M8 4.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/>
+        <path d="M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm9.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zM5.464 10.536a.5.5 0 0 1 0 .707L4.05 12.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm7.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM5.464 5.464a.5.5 0 0 1-.707 0L3.343 4.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707z"/>
+    </svg>
+
+    <!-- Moon Icon -->
+    <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" style="display:none;">
+        <path d="M6 0a6 6 0 1 0 6 6 5 5 0 1 1-6-6z"/>
+    </svg>
+</button>
+<p id="message"></p>
+</body>
+
+<script src="script.js"></script>
+
+
+</html>
