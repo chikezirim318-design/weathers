@@ -14,7 +14,14 @@ async function getWeather() {
         showErrorModal("Please enter a city name.");
         return;
     }
-console.log("City entered:", city);
+
+    // show loader FIRST
+    showLoader();
+
+    // force browser to paint loader before heavy work starts
+    await new Promise(requestAnimationFrame);
+
+    console.log("City entered:", city);
     document.getElementById("message").innerText = "";
 
     const apiKey = "a669d9f325da77f4f44aeaec403f5362";
@@ -24,11 +31,12 @@ console.log("City entered:", city);
         const response = await fetch(url);
         const data = await response.json();
 
-        // FIX: Handle both string & number
+        // city not found
         if (data.cod == 404) {
             showErrorModal("City not found. Please check the name and try again.");
             clearWeatherDisplay();
-            if (chart) chart.destroy(); // FIX: clear chart
+            if (chart) chart.destroy();
+            hideLoader();
             return;
         }
 
@@ -41,25 +49,32 @@ console.log("City entered:", city);
         const regions = new Intl.DisplayNames(['en'], { type: 'region' });
         const country = regions.of(data.sys.country);
 
-        document.getElementById("cityName").innerText = `${data.name}, ${country}`;
+        document.getElementById("cityName").innerText =
+            `${data.name}, ${country}`;
+
         currentTemp = data.main.temp;
 
-        // FIX: Ensure ID matches your HTML (temperature not temprature)
-        document.getElementById("temperature").innerText = currentTemp + "°C";
+        document.getElementById("temperature").innerText =
+            currentTemp + "°C";
 
-        document.getElementById("description").innerText = data.weather[0].description;
+        document.getElementById("description").innerText =
+            data.weather[0].description;
 
         changeBackground(data.weather[0].main);
         updateTime(data.timezone);
-        getForecast(city);
+
+        // forecast (ONLY ONCE)
+        await getForecast(city);
 
     } catch (err) {
         showErrorModal("Error fetching weather data. Please try again later.");
         clearWeatherDisplay();
-        if (chart) chart.destroy(); // FIX
+        if (chart) chart.destroy();
+    } finally {
+        // ALWAYS hide loader at the end
+        hideLoader();
     }
 }
-
 // Clears weather display
 function clearWeatherDisplay() {
     document.getElementById("cityName").innerText = "";
@@ -173,6 +188,18 @@ async function getForecast(city) {
     } catch (err) {
         document.getElementById("message").innerText = "Error fetching forecast data";
     }
+    //loader
+    try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // your logic...
+
+    hideLoader(); // ensure it stops here too
+
+} catch (err) {
+    hideLoader();
+}
 }
 
 // Create chart
@@ -339,17 +366,34 @@ document.addEventListener("click", (e) => {
         suggestions.innerHTML = "";
     }
 });
+//loader
+function showLoader() {
+    document.getElementById("loader").classList.remove("hidden");
+}
 
-// Enter key search
-input.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
-        suggestions.innerHTML = "";
-        getWeather();
-    }
+function hideLoader() {
+    document.getElementById("loader").classList.add("hidden");
+}
+window.addEventListener("load", () => {
+    const loader = document.getElementById("loader");
+
+    
+    loader.classList.remove("hidden");
+
+    setTimeout(() => {
+        loader.classList.add("hidden");
+    }, 2000);
 });
 
 // Button  (event listener)
 document.getElementById("searchBtn").addEventListener("click", () => {
     suggestions.innerHTML = "";
     getWeather();
+});
+// Enter key search
+input.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+        suggestions.innerHTML = "";
+        getWeather();
+    }
 });

@@ -11,16 +11,16 @@
 
 <body>
     <div class="container">
-        <h1 class="title">Zirim Weather</h1>
+        <h1 class="title">THE WEATHER</h1>
 
         <div class="search-box">
             <input type="text" id="city" placeholder="Enter city name">
             
             <button id="searchBtn">Search</button>
             <button onclick="toggleUnit()">°C / °F</button>
-        
-            
             <ul id="suggestions" class="suggestions"></ul>
+            
+        
 
         </div>
 
@@ -58,6 +58,9 @@
     </svg>
 </button>
 <p id="message"></p>
+<div id="loader" class="loader-container">
+    <div class="spinner"></div>
+</div>
 </body>
 
 <script src="script.js"></script>
